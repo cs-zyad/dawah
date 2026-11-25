@@ -34,11 +34,11 @@ export default async function MockCheckout({ params }: { params: Promise<{ id: s
             <span className="muted">الحالة</span>
             {p.status === "paid" ? <Tag tone="ok">مدفوع</Tag> : p.status === "failed" ? <Tag tone="bad">فشل</Tag> : <Tag tone="warn">بانتظار الدفع</Tag>}
           </div>
-          {p.status !== "paid" ? (
-            <ActionForm action={mockPayAction.bind(null, p.id, "succeed")}>
-              <Submit className="btn primary big block">ادفع الآن (تجريبي)</Submit>
-            </ActionForm>
-          ) : null}
+          <ActionForm action={mockPayAction.bind(null, p.id, "succeed")}>
+            <Submit className="btn primary big block" disabled={p.status === "paid"}>
+              {p.status === "paid" ? "تم الدفع ✓" : "ادفع الآن (تجريبي)"}
+            </Submit>
+          </ActionForm>
           {p.lastWebhook ? (
             <ActionForm action={mockPayAction.bind(null, p.id, "resend")}>
               <Submit className="btn block">إعادة إرسال نفس الإشعار</Submit>
@@ -47,11 +47,11 @@ export default async function MockCheckout({ params }: { params: Promise<{ id: s
               </p>
             </ActionForm>
           ) : null}
-          {p.status === "pending" ? (
-            <ActionForm action={mockPayAction.bind(null, p.id, "fail")}>
-              <Submit className="btn danger block">محاكاة فشل الدفع</Submit>
-            </ActionForm>
-          ) : null}
+          <ActionForm action={mockPayAction.bind(null, p.id, "fail")}>
+            <Submit className="btn danger block" disabled={p.status !== "pending"}>
+              محاكاة فشل الدفع
+            </Submit>
+          </ActionForm>
           <Link href={back} className="btn ghost block">
             العودة
           </Link>

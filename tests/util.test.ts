@@ -101,3 +101,29 @@ describe("قرار المقاعد والباقة", () => {
     expect(big).toMatchObject({ places: 1010, extraPlaces: 10, price: 119900 + 10 * 200 });
   });
 });
+
+describe("قراءة QR بـ jsQR (البديل عند غياب BarcodeDetector)", () => {
+  it("يفك رمز تذكرة حقيقي بلا بيانات شخصية", async () => {
+    const QRCode = (await import("qrcode")).default;
+    const jsQR = (await import("jsqr")).default;
+    const token = randomToken();
+    const url = `http://localhost:3000/t/${token}`;
+    const qr = QRCode.create(url, { errorCorrectionLevel: "M" });
+    const n = qr.modules.size;
+    const scale = 6;
+    const margin = 4;
+    const size = (n + margin * 2) * scale;
+    const data = new Uint8ClampedArray(size * size * 4).fill(255);
+    for (let y = 0; y < n; y++)
+      for (let x = 0; x < n; x++)
+        if (qr.modules.get(y, x))
+          for (let dy = 0; dy < scale; dy++)
+            for (let dx = 0; dx < scale; dx++) {
+              const i = (((y + margin) * scale + dy) * size + (x + margin) * scale + dx) * 4;
+              data[i] = data[i + 1] = data[i + 2] = 0;
+            }
+    const out = jsQR(data, size, size);
+    expect(out?.data).toBe(url);
+    expect(parseTicketInput(out!.data)).toBe(token);
+  });
+});

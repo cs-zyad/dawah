@@ -58,3 +58,4 @@ ui-debug.log
 test-results/
 playwright-report/
 e2e/.artifacts/
+.next-e2e/

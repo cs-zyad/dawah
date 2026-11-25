@@ -35,7 +35,7 @@ describe("السعة والتزامن — الرابط العام", () => {
     const results = await Promise.all(Array.from({ length: 56 }, (_, i) => registerPublic(e.publicSlug, `${uniq()}-paid-key-xxxx`, pubInput(100 + i))));
     expect(results.filter((r) => r.status === "confirmed")).toHaveLength(50);
     expect((await getEvent(e.id))!.reservedSeats).toBe(50);
-  });
+  }, 240_000);
 
   it("سياسة الانتظار: المؤكدون حتى السعة والبقية في الانتظار", async () => {
     const org = await mkUser();

@@ -13,6 +13,8 @@ function hostsFromEnv(): string[] {
 }
 
 const nextConfig: NextConfig = {
+  // يسمح باختبار المتصفح على بناء منفصل دون التعارض مع خادم التطوير
+  distDir: process.env.NEXT_DIST_DIR || ".next",
   poweredByHeader: false,
   serverExternalPackages: ["firebase-admin", "exceljs"],
   allowedDevOrigins: ["*.app.github.dev", "127.0.0.1", ...hostsFromEnv().map((h) => h.split(":")[0])],

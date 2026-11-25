@@ -86,7 +86,8 @@ export function Scanner({ eventId, initialCount, capacity }: { eventId: string; 
       await v.play();
       setCamState("on");
       let detector: InstanceType<NonNullable<Window["BarcodeDetector"]>> | null = null;
-      if (window.BarcodeDetector) {
+      const forceJsqr = new URLSearchParams(location.search).get("engine") === "jsqr";
+      if (window.BarcodeDetector && !forceJsqr) {
         try {
           detector = new window.BarcodeDetector({ formats: ["qr_code"] });
           await detector.detect(v);
