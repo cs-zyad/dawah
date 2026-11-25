@@ -12,7 +12,7 @@ import type { EventDoc, FullPolicy, User } from "@/lib/types";
 
 export async function resetDb() {
   const host = process.env.FIRESTORE_EMULATOR_HOST!;
-  const res = await fetch(`http://${host}/emulator/v1/projects/demo-wafda/databases/(default)/documents`, { method: "DELETE" });
+  const res = await fetch(`http://${host}/emulator/v1/projects/${process.env.GCLOUD_PROJECT}/databases/(default)/documents`, { method: "DELETE" });
   if (!res.ok) throw new Error(`reset failed ${res.status}`);
   await ensureDefaultTemplates();
   // إعدادات اختبار: إعادة المحاولة بلا انتظار

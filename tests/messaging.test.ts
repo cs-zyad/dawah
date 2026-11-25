@@ -6,7 +6,8 @@ import { dispatchDue } from "@/lib/core/messages";
 import { updateSettings } from "@/lib/core/settings";
 import { getUser } from "@/lib/core/users";
 import { addInvitations } from "@/lib/core/invitations";
-import type { MessageDoc, Reminder } from "@/lib/types";
+import type { MessageDoc } from "@/lib/types";
+import type { Reminder } from "@/lib/core/sending";
 import { resetDb, mkUser, mkEvent, invitationsOf, topup, uniq } from "./helpers";
 
 beforeAll(resetDb);

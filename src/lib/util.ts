@@ -202,3 +202,9 @@ export function maskContact(c: string): string {
   }
   return `${c.slice(0, 4)}*****${c.slice(-3)}`;
 }
+
+/** عرض الرقم السعودي بالصيغة المحلية 05xxxxxxxx (للحقول التي يعدّلها الضيف) */
+export function localPhone(p: string | null | undefined): string {
+  if (!p) return "";
+  return /^\+9665\d{8}$/.test(p) ? `0${p.slice(4)}` : p;
+}

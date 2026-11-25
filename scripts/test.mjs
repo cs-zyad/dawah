@@ -7,7 +7,7 @@ delete env.FIREBASE_SERVICE_ACCOUNT;
 const args = process.argv.slice(2).join(" ");
 const r = spawnSync(
   "npx",
-  ["firebase", "emulators:exec", "--only", "firestore", "--project", "demo-wafda", `npx vitest run ${args}`],
+  ["firebase", "emulators:exec", "--config", "firebase.test.json", "--only", "firestore", "--project", "demo-wafda-test", `npx vitest run ${args}`],
   { stdio: "inherit", env },
 );
 process.exit(r.status ?? 1);

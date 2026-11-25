@@ -5,11 +5,11 @@ import { audit } from "./audit";
 
 /** التخطيطات الخمسة المبنية في الكود. الأدمن يتحكم بالاسم والتصنيف والألوان والظهور والترتيب. */
 export const LAYOUTS: Record<LayoutKey, { label: string; defaultName: string; category: string; colors: TemplateDoc["colors"] }> = {
-  plum_frame: { label: "إطار برقوقي", defaultName: "إطار برقوقي", category: "عام", colors: ["#28182C", "#DDF480", "#FBF7EF", "#E8DEED", "#65586B"] },
+  plum_frame: { label: "إطار برقوقي", defaultName: "إطار برقوقي", category: "عام", colors: ["#28182C", "#FBF7EF", "#DDF480", "#3A2540", "#D9CCDF"] },
   ivory_classic: { label: "عاجي كلاسيكي", defaultName: "عاجي كلاسيكي", category: "مناسبات", colors: ["#FBF7EF", "#28182C", "#B08D57", "#E8DEED", "#65586B"] },
   lilac_soft: { label: "ليلكي ناعم", defaultName: "ليلكي ناعم", category: "اجتماعي", colors: ["#E8DEED", "#28182C", "#FFFFFF", "#DDF480", "#65586B"] },
   corporate: { label: "رسمي للشركات", defaultName: "رسمي للشركات", category: "شركات", colors: ["#FFFFFF", "#1F2A44", "#DDF480", "#EEF1F6", "#5B6475"] },
-  workshop: { label: "ورش وتدريب", defaultName: "ورش وتدريب", category: "تدريب", colors: ["#DDF480", "#28182C", "#FFFFFF", "#28182C", "#3D3341"] },
+  workshop: { label: "ورش وتدريب", defaultName: "ورش وتدريب", category: "تدريب", colors: ["#DDF480", "#28182C", "#28182C", "#FFFFFF", "#4A3F4F"] },
 };
 
 /** معاني الألوان الخمسة في كل تخطيط */
@@ -90,4 +90,12 @@ export async function setTemplateVisible(actorId: string, id: string, visible: b
   if (!cur) throw notFound("القالب");
   await db().collection(C.templates).doc(id).update({ visible });
   await audit(actorId, visible ? "template.show" : "template.hide", `templates/${id}`, {});
+}
+
+/** القالب المعروض لفعالية (أو القالب الافتراضي إن لم يُختر بعد). */
+export async function resolveTemplate(templateId: string | null): Promise<Pick<TemplateDoc, "layout" | "colors" | "name">> {
+  const t = await getTemplate(templateId);
+  if (t) return t;
+  const l = LAYOUTS.plum_frame;
+  return { layout: "plum_frame", colors: l.colors, name: l.defaultName };
 }

@@ -1,69 +1,72 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+import Link from "next/link";
+import { redirect } from "next/navigation";
+import { PublicHeader } from "@/components/Shell";
+import { currentUser, homeFor, isDemo } from "@/lib/session";
+import { brand } from "@/config/brand";
 
-export default function Home() {
+export default async function Home() {
+  const u = await currentUser();
+  if (u) redirect(homeFor(u));
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
-          <h1>
-            To get started, edit the{" "}
-            <code className={styles.code}>page.tsx</code> file.
-          </h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <>
+      <PublicHeader />
+      <section className="hero">
+        <div className="container">
+          <p className="tag plum" style={{ marginBottom: 14 }}>
+            {brand.fullName}
           </p>
+          <h1>{brand.tagline}</h1>
+          <p className="lead">
+            جهّز دعوتك، أرسلها عبر واتساب أو البريد، واستلم تأكيدات الحضور مع تذكرة QR لكل ضيف ومرافقه، ثم سجّل الدخول عند الباب بمسح سريع من الجوال.
+          </p>
+          <div className="row" style={{ marginTop: 22 }}>
+            <Link className="btn primary big" href="/register">
+              أنشئ فعاليتك
+            </Link>
+            <Link className="btn big" href="/login" style={{ background: "transparent", color: "var(--ivory)", borderColor: "rgba(255,255,255,.3)" }}>
+              تسجيل الدخول
+            </Link>
+          </div>
         </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </section>
+      <main className="container page">
+        <div className="grid grid-3">
+          {[
+            ["١. جهّز الدعوة", "البيانات مرة واحدة، والقالب يعرضها كما هي في صفحة الدعوة ورسالة واتساب والبريد."],
+            ["٢. أرسل وتابع", "من دُعي، من أكّد، ومن اعتذر، ومن تعذّر الإرسال إليه — مع تذكير لمن لم يرد."],
+            ["٣. استقبل بالباب", "فريق الاستقبال يمسح QR من الجوال، ويعرف فورًا: دخل، أو حضر مسبقًا، أو تذكرة لا تخص الفعالية."],
+          ].map(([t, d]) => (
+            <div className="card" key={t}>
+              <h3>{t}</h3>
+              <p className="muted" style={{ margin: 0 }}>
+                {d}
+              </p>
+            </div>
+          ))}
         </div>
+        {isDemo() ? (
+          <div className="card soft" style={{ marginTop: 20 }}>
+            <h3>تجربة سريعة</h3>
+            <p className="small">
+              كلمة المرور لكل حسابات التجربة: <bdi className="ltr">Wafda@2026</bdi>
+            </p>
+            <ul className="small" style={{ margin: 0, paddingInlineStart: 18 }}>
+              <li>
+                منظّم: <bdi className="ltr">organizer@wafda.test</bdi>
+              </li>
+              <li>
+                استقبال: <bdi className="ltr">staff@wafda.test</bdi>
+              </li>
+              <li>
+                أدمن: <bdi className="ltr">admin@wafda.test</bdi>
+              </li>
+            </ul>
+          </div>
+        ) : null}
       </main>
-    </div>
+      <footer className="site container">
+        {brand.fullName} — {brand.tagline}
+      </footer>
+    </>
   );
 }

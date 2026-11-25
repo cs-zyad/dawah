@@ -48,6 +48,8 @@ export function db(): Firestore {
   if (existing) {
     app = existing;
   } else if (process.env.FIRESTORE_EMULATOR_HOST) {
+    // المحاكي لا يحتاج بيانات اعتماد؛ نمنع البحث عن خادم بيانات Google Cloud
+    process.env.METADATA_SERVER_DETECTION ??= "none";
     app = initializeApp({ projectId: process.env.GCLOUD_PROJECT || "demo-wafda" }, "wafda");
   } else {
     const status = firebaseConfigStatus();

@@ -4,11 +4,15 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "node scripts/build.mjs && next build",
     "start": "next start",
     "lint": "eslint",
     "test": "node scripts/test.mjs",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "dev:local": "node scripts/dev-local.mjs",
+    "seed": "node scripts/seed.mjs",
+    "worker": "tsx --tsconfig tsconfig.json scripts/worker.ts",
+    "test:e2e": "node scripts/e2e.mjs"
   },
   "dependencies": {
     "@fontsource/noto-kufi-arabic": "^5.3.0",
